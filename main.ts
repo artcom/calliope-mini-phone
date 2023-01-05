@@ -2,7 +2,7 @@ enum RadioMessage {
     message1 = 49434
 }
 input.onButtonEvent(Button.A, ButtonEvent.Click, function () {
-	
+    send("phone/onButtonA")
 })
 pins.onPulsed(DigitalPin.P1, PulseValue.Low, function () {
     send("phone/onDialed " + counter)
@@ -11,6 +11,7 @@ pins.onPulsed(DigitalPin.P1, PulseValue.Low, function () {
 })
 pins.onPulsed(DigitalPin.P1, PulseValue.High, function () {
     send("phone/onStartDial")
+    pulseCount = 0
     basic.clearScreen()
     counter = 0
     led.plot(4, 0)
@@ -26,7 +27,8 @@ function send (message: string) {
 }
 pins.onPulsed(DigitalPin.P0, PulseValue.Low, function () {
     if (control.millis() - lastPulse > 70) {
-        send("phone/onPulse")
+        send("phone/onPulse " + pulseCount)
+        pulseCount += 1
         led.plot(0, 0)
         if (counter < 9) {
             counter += 1
@@ -37,6 +39,7 @@ pins.onPulsed(DigitalPin.P0, PulseValue.Low, function () {
     }
 })
 let lastPulse = 0
+let pulseCount = 0
 let repeats = 0
 let counter = 0
 radio.setTransmitPower(7)
@@ -45,7 +48,8 @@ radio.setFrequencyBand(42)
 pins.setPull(DigitalPin.P0, PinPullMode.PullUp)
 pins.setPull(DigitalPin.P1, PinPullMode.PullUp)
 basic.showNumber(counter)
-repeats = 0
+repeats = 3
+pulseCount = 0
 basic.forever(function () {
 	
 })
