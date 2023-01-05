@@ -1,0 +1,29 @@
+{
+    "name": "telefon",
+    "description": "",
+    "dependencies": {
+        "core": "*",
+        "radio": "*",
+        "radio-broadcast": "*"
+    },
+    "files": [
+        "main.blocks",
+        "main.ts",
+        "README.md"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "targetVersions": {
+        "branch": "v3.0.33",
+        "tag": "v3.0.33",
+        "commits": "https://github.com/microsoft/pxt-calliope/commits/3742cc45f2721da346c8f20d3634ddd20487fcf9",
+        "target": "4.0.29",
+        "pxt": "6.0.23",
+        "targetId": "calliopemini"
+    },
+    "supportedTargets": [
+        "calliopemini"
+    ],
+    "preferredEditor": "blocksprj"
+}
