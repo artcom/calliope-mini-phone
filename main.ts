@@ -48,7 +48,7 @@ radio.setFrequencyBand(42)
 pins.setPull(DigitalPin.P0, PinPullMode.PullUp)
 pins.setPull(DigitalPin.P1, PinPullMode.PullUp)
 basic.showNumber(counter)
-repeats = 3
+repeats = 8
 pulseCount = 0
 basic.forever(function () {
 	
