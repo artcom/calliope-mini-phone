@@ -5,12 +5,12 @@ input.onButtonEvent(Button.A, ButtonEvent.Click, function () {
 	
 })
 pins.onPulsed(DigitalPin.P1, PulseValue.Low, function () {
-    radio.sendString("phone/onDialed " + counter)
+    send("phone/onDialed " + counter)
     led.unplot(4, 0)
     basic.showNumber(counter)
 })
 pins.onPulsed(DigitalPin.P1, PulseValue.High, function () {
-    radio.sendString("phone/onStartDial")
+    send("phone/onStartDial")
     basic.clearScreen()
     counter = 0
     led.plot(4, 0)
@@ -26,7 +26,7 @@ function send (message: string) {
 }
 pins.onPulsed(DigitalPin.P0, PulseValue.Low, function () {
     if (control.millis() - lastPulse > 70) {
-        radio.sendString("phone/onPulse")
+        send("phone/onPulse")
         led.plot(0, 0)
         if (counter < 9) {
             counter += 1
