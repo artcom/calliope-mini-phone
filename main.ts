@@ -5,9 +5,11 @@ input.onButtonEvent(Button.A, ButtonEvent.Click, function () {
     sendR("phone/onButtonA", 5)
 })
 pins.onPulsed(DigitalPin.P1, PulseValue.Low, function () {
-    sendR("phone/onDialed " + counter, 40)
-    led.unplot(4, 0)
-    basic.showNumber(counter)
+    if (pins.digitalReadPin(DigitalPin.P1) == 1) {
+        sendR("phone/onDialed " + counter, 40)
+        led.unplot(4, 0)
+        basic.showNumber(counter)
+    }
 })
 function sendR (message: string, repeat: number) {
     serial.writeLine(message)
@@ -16,7 +18,7 @@ function sendR (message: string, repeat: number) {
     }
 }
 pins.onPulsed(DigitalPin.P1, PulseValue.High, function () {
-    if (control.millis() - lastDialstart > 70) {
+    if (control.millis() - lastDialstart > 300) {
         sendR("phone/onStartDial", 5)
         pulseCount = 0
         basic.clearScreen()
@@ -24,13 +26,14 @@ pins.onPulsed(DigitalPin.P1, PulseValue.High, function () {
         led.plot(4, 0)
         control.waitMicros(100000)
         lastDialstart = control.millis()
+        lastPulse = control.millis()
     }
 })
 pins.onPulsed(DigitalPin.P0, PulseValue.High, function () {
     led.unplot(0, 0)
 })
 pins.onPulsed(DigitalPin.P0, PulseValue.Low, function () {
-    if (control.millis() - lastPulse > 70) {
+    if (control.millis() - lastPulse > 60) {
         sendR("phone/onPulse " + pulseCount, 5)
         pulseCount += 1
         led.plot(0, 0)
