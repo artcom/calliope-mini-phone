@@ -5,22 +5,26 @@ input.onButtonEvent(Button.A, ButtonEvent.Click, function () {
     sendR("phone/onButtonA", 5)
 })
 pins.onPulsed(DigitalPin.P1, PulseValue.Low, function () {
-    sendR("phone/onDialed " + counter, 20)
+    sendR("phone/onDialed " + counter, 40)
     led.unplot(4, 0)
     basic.showNumber(counter)
 })
 function sendR (message: string, repeat: number) {
+    serial.writeLine(message)
     for (let index = 0; index < repeat; index++) {
         radio.sendString(message)
     }
 }
 pins.onPulsed(DigitalPin.P1, PulseValue.High, function () {
-    sendR("phone/onStartDial", 5)
-    pulseCount = 0
-    basic.clearScreen()
-    counter = 0
-    led.plot(4, 0)
-    control.waitMicros(2000)
+    if (control.millis() - lastDialstart > 70) {
+        sendR("phone/onStartDial", 5)
+        pulseCount = 0
+        basic.clearScreen()
+        counter = 0
+        led.plot(4, 0)
+        control.waitMicros(100000)
+        lastDialstart = control.millis()
+    }
 })
 pins.onPulsed(DigitalPin.P0, PulseValue.High, function () {
     led.unplot(0, 0)
@@ -39,6 +43,7 @@ pins.onPulsed(DigitalPin.P0, PulseValue.Low, function () {
     }
 })
 let lastPulse = 0
+let lastDialstart = 0
 let pulseCount = 0
 let counter = 0
 radio.setTransmitPower(7)
@@ -49,6 +54,7 @@ pins.setPull(DigitalPin.P1, PinPullMode.PullUp)
 basic.showNumber(counter)
 let repeats = 8
 pulseCount = 0
+lastDialstart = 0
 basic.forever(function () {
 	
 })
