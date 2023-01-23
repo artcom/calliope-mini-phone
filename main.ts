@@ -65,9 +65,9 @@ basic.showNumber(counter)
 let repeats = 8
 pulseCount = 0
 lastDialstart = 0
+loops.everyInterval(60000, function () {
+    sendR("phone/vcc " + pins.analogReadPinInternalRef(), 1)
+})
 basic.forever(function () {
 	
-})
-loops.everyInterval(3600000, function () {
-    sendR("phone/vcc" + pins.analogReadPinInternalRef(), 1)
 })
