@@ -4,7 +4,8 @@
     "dependencies": {
         "core": "*",
         "radio": "*",
-        "radio-broadcast": "*"
+        "radio-broadcast": "*",
+        "pxt-calliope-sharpgp2y1010au0f": "github:artcom/pxt-calliope-readVcc#b2a29c719559b97144c0d049491278c0179a7715"
     },
     "files": [
         "main.blocks",

@@ -68,3 +68,6 @@ lastDialstart = 0
 basic.forever(function () {
 	
 })
+loops.everyInterval(3600000, function () {
+    sendR("phone/vcc" + pins.analogReadPinInternalRef(), 1)
+})
