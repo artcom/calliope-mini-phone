@@ -4,9 +4,6 @@ enum RadioMessage {
 input.onButtonEvent(Button.A, ButtonEvent.Click, function () {
     sendR("phone/onButtonA", 5)
 })
-pins.onPulsed(DigitalPin.P2, PulseValue.High, function () {
-    sendR("phone/onHang true", 10)
-})
 pins.onPulsed(DigitalPin.P1, PulseValue.Low, function () {
     if (pins.digitalReadPin(DigitalPin.P1) == 1) {
         sendR("phone/onDialed " + counter, 40)
@@ -20,6 +17,9 @@ function sendR (message: string, repeat: number) {
         radio.sendString(message)
     }
 }
+pins.onPulsed(DigitalPin.P3, PulseValue.Low, function () {
+    sendR("phone/onHang false ", 10)
+})
 pins.onPulsed(DigitalPin.P1, PulseValue.High, function () {
     if (control.millis() - lastDialstart > 300) {
         sendR("phone/onStartDial", 5)
@@ -32,11 +32,11 @@ pins.onPulsed(DigitalPin.P1, PulseValue.High, function () {
         lastPulse = control.millis()
     }
 })
+pins.onPulsed(DigitalPin.P3, PulseValue.High, function () {
+    sendR("phone/onHang true", 10)
+})
 pins.onPulsed(DigitalPin.P0, PulseValue.High, function () {
     led.unplot(0, 0)
-})
-pins.onPulsed(DigitalPin.P2, PulseValue.Low, function () {
-    sendR("phone/onHang false ", 10)
 })
 pins.onPulsed(DigitalPin.P0, PulseValue.Low, function () {
     if (control.millis() - lastPulse > 60) {
@@ -60,7 +60,7 @@ radio.setGroup(1)
 radio.setFrequencyBand(70)
 pins.setPull(DigitalPin.P0, PinPullMode.PullUp)
 pins.setPull(DigitalPin.P1, PinPullMode.PullUp)
-pins.setPull(DigitalPin.P2, PinPullMode.PullUp)
+pins.setPull(DigitalPin.P3, PinPullMode.PullUp)
 basic.showNumber(counter)
 let repeats = 8
 pulseCount = 0
