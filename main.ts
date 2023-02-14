@@ -1,43 +1,6 @@
 enum RadioMessage {
     message1 = 49434
 }
-input.onButtonEvent(Button.A, ButtonEvent.Click, function () {
-    sendR("phone/onButtonA", 5)
-})
-pins.onPulsed(DigitalPin.P1, PulseValue.Low, function () {
-    if (pins.digitalReadPin(DigitalPin.P1) == 1) {
-        sendR("phone/onDialed " + counter, 40)
-        led.unplot(4, 0)
-        basic.showNumber(counter)
-    }
-})
-function sendR (message: string, repeat: number) {
-    serial.writeLine(message)
-    for (let index = 0; index < repeat; index++) {
-        radio.sendString(message)
-    }
-}
-pins.onPulsed(DigitalPin.P3, PulseValue.Low, function () {
-    sendR("phone/onHang false ", 10)
-})
-pins.onPulsed(DigitalPin.P1, PulseValue.High, function () {
-    if (control.millis() - lastDialstart > 300) {
-        sendR("phone/onStartDial", 5)
-        pulseCount = 0
-        basic.clearScreen()
-        counter = 0
-        led.plot(4, 0)
-        control.waitMicros(100000)
-        lastDialstart = control.millis()
-        lastPulse = control.millis()
-    }
-})
-pins.onPulsed(DigitalPin.P3, PulseValue.High, function () {
-    sendR("phone/onHang true", 10)
-})
-pins.onPulsed(DigitalPin.P0, PulseValue.High, function () {
-    led.unplot(0, 0)
-})
 pins.onPulsed(DigitalPin.P0, PulseValue.Low, function () {
     if (control.millis() - lastPulse > 60) {
         sendR("phone/onPulse " + pulseCount, 5)
@@ -50,6 +13,40 @@ pins.onPulsed(DigitalPin.P0, PulseValue.Low, function () {
         }
         lastPulse = control.millis()
     }
+})
+function sendR (message: string, repeat: number) {
+    serial.writeLine(message)
+    for (let index = 0; index < repeat; index++) {
+        radio.sendString(message)
+    }
+}
+pins.onPulsed(DigitalPin.P1, PulseValue.High, function () {
+    if (control.millis() - lastDialstart > 300) {
+        sendR("phone/onStartDial", 5)
+        pulseCount = 0
+        basic.clearScreen()
+        counter = 0
+        led.plot(4, 0)
+        control.waitMicros(100000)
+        lastDialstart = control.millis()
+        lastPulse = control.millis()
+    }
+})
+pins.onPulsed(DigitalPin.P3, PulseValue.Low, function () {
+    sendR("phone/onHang false ", 10)
+})
+pins.onPulsed(DigitalPin.P1, PulseValue.Low, function () {
+    if (pins.digitalReadPin(DigitalPin.P1) == 1) {
+        sendR("phone/onDialed " + counter, 40)
+        led.unplot(4, 0)
+        basic.showNumber(counter)
+    }
+})
+pins.onPulsed(DigitalPin.P0, PulseValue.High, function () {
+    led.unplot(0, 0)
+})
+pins.onPulsed(DigitalPin.P3, PulseValue.High, function () {
+    sendR("phone/onHang true", 10)
 })
 let lastPulse = 0
 let lastDialstart = 0
@@ -65,9 +62,6 @@ basic.showNumber(counter)
 let repeats = 8
 pulseCount = 0
 lastDialstart = 0
-basic.forever(function () {
-	
-})
 loops.everyInterval(1200000, function () {
     sendR("phone/vcc " + pins.analogReadPinInternalRef(), 1)
 })
