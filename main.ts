@@ -1,6 +1,15 @@
 enum RadioMessage {
     message1 = 49434
 }
+/**
+ * Pulse Input on P0
+ */
+/**
+ * Dial input on P1
+ */
+/**
+ * Fork on P3
+ */
 pins.onPulsed(DigitalPin.P0, PulseValue.Low, function () {
     if (control.millis() - lastPulse > 60) {
         sendR("phone/onPulse " + pulseCount, 5)
@@ -59,7 +68,6 @@ pins.setPull(DigitalPin.P0, PinPullMode.PullUp)
 pins.setPull(DigitalPin.P1, PinPullMode.PullUp)
 pins.setPull(DigitalPin.P3, PinPullMode.PullUp)
 basic.showNumber(counter)
-let repeats = 8
 pulseCount = 0
 lastDialstart = 0
 loops.everyInterval(1200000, function () {
